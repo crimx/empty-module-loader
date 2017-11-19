@@ -1,0 +1,24 @@
+{
+  "name": "empty-module-loader",
+  "version": "0.1.1",
+  "description": "A webpack loader that replaces module with empty function.",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/crimx/empty-module-loader.git"
+  },
+  "keywords": [
+    "webpack",
+    "loader",
+    "empty",
+    "remove",
+    "debug",
+    "module"
+  ],
+  "author": "CRIMX",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/crimx/empty-module-loader/issues"
+  },
+  "homepage": "https://github.com/crimx/empty-module-loader"
+}
