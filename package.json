@@ -1,6 +1,6 @@
 {
   "name": "empty-module-loader",
-  "version": "0.1.1",
+  "version": "1.0.0",
   "description": "A webpack loader that replaces module with empty function.",
   "main": "index.js",
   "repository": {
