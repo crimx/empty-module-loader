@@ -29,70 +29,105 @@ module.exports = {
 }
 ```
 
-<h2 align="center">Examples</h2>
+That is it! All the related codes should be removed in production.
 
-To remove [debug](https://github.com/visionmedia/debug) from production code, this loader works best with [babel-plugin-strip-function-call](https://github.com/azu/babel-plugin-strip-function-call), a comparatively robust plugin for removing function calls(using AST instead of hacky RegExp).
+<h2 align="center">Example</h2>
+
+This config is for demonstration only.
 
 **webpack.config.js**
 
 ```js
+const path = require('path')
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin')
+
 module.exports = {
+  entry: './src/index.js',
+  output: {
+    filename: 'main.js',
+    path: path.resolve(__dirname, 'dist'),
+  },
   module: {
     rules: [
       {
-        test: /node_modules.debug/,
-        loader: 'empty-module-loader'
-      }
-    ]
-  }
+        test: /debug/,
+        loader: require.resolve('empty-module-loader')
+      },
+    ],
+  },
+  optimization: {
+    minimizer: [
+      new UglifyJsPlugin({
+        uglifyOptions: {
+          warnings: false,
+          mangle: false,
+          ie8: false,
+          output: {
+            preserve_line: true,
+            comments: true,
+            indent_level: 2,
+          },
+        },
+      }),
+    ],
+  },
 }
+
 ```
 
-**.babelrc**
+**src/index.js**
 
-```json
-{
-  "env": {
-    "production": {
-      "plugins": [["strip-function-call", {
-        "strip": ["debug"]
-      }]]
-    }
-  }
-}
+```javascript
+import debug from './debug'
+
+console.log('normal code')
+
+debug('booting %o', 3)
+
+console.log('normal code')
+
 ```
 
-<h3 align="center">Input</h3>
+**src/debug.js**
 
-```js
-const debug = require('debug')('http');
+```javascript
+export default function debug (...args) {
+  console.log('debug:', ...args)
+}
 
-console.log('normal code');
+```
 
-debug('booting %o', 3);
+<h3 align="center">Run Commands At Project Root</h3>
 
-console.log('normal code');
+```bash
+npm init -y
+npm install webpack webpack-cli uglifyjs-webpack-plugin --save-dev
+npx webpack --config webpack.config.js
 ```
 
 <h3 align="center">Output</h3>
 
 ```js
+/************************************************************************/
+/******/([
 /* 0 */
-/***/ (function(module, exports, __webpack_require__) {
+/***/function(module,__webpack_exports__,__webpack_require__){
 
-var debug = __webpack_require__(1)('http');
+"use strict"
+;__webpack_require__.r(__webpack_exports__);// removed by empty-module-loader
+// CONCATENATED MODULE: ./src/index.js
 
-console.log('normal code');
 
-console.log('normal code');
 
-/***/ }),
-/* 1 */
-/***/ (function(module, exports) {
 
-module.exports = function () {} // removed by empty-module-loader
 
-/***/ })
+console.log("normal code"),
+
+
+
+console.log("normal code")
+/***/}
+/******/]);
 ```
 
 [npm]: https://img.shields.io/npm/v/empty-module-loader.svg

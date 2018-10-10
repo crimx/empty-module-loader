@@ -1,6 +1,6 @@
 function empty () {
-	this.cacheable()
-	return 'module.exports = function () {} // removed by empty-module-loader'
+  this.cacheable()
+  return 'export default function () { } // removed by empty-module-loader'
 }
 
 module.exports = empty
